@@ -3,6 +3,7 @@ package com.tinnews.network;
 import android.content.Context;
 
 import com.ashokvarma.gander.GanderInterceptor;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.tinnews.password.Password;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+//responsible for providing a configured Retrofit instance, that can then instantiate a NewsApi implementation
 public class RetrofitClient {
     private static final String API_KEY = Password.API_KEY;
     private static final String BASE_URL = "https://newsapi.org/v2/";
@@ -22,6 +24,7 @@ public class RetrofitClient {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(new HeaderInterceptor())
                 .addInterceptor(new GanderInterceptor(context).showNotification(true))
+                .addNetworkInterceptor(new StethoInterceptor())
                 .build();
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
